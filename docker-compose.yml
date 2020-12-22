@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  alaska:
+    image: azshoo/alaska:latest
+    ports:
+      - "8091:8091"
+
+  api-tests:
+    image: alaska-tests:latest
+    volumes:
+      - /tmp/alaska-tests:/app/target
+    command: sh -c "cd /app ; ls -la /app/target ; mvn test ; export EXIT_CODE=$$? ; mvn allure:report ; exit $$EXIT_CODE"
+    depends_on:
+      - alaska
